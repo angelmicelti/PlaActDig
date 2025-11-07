@@ -2,7 +2,7 @@
   "name": "Plan de Actuación Digital - IES Virgen de Villadiego",
   "short_name": "Plan Digital",
   "description": "Aplicación para gestionar el Plan de Actuación Digital del IES Virgen de Villadiego",
-  "start_url": "/",
+  "start_url": "/PlaActDig/",
   "display": "standalone",
   "background_color": "#3498db",
   "theme_color": "#2c3e50",

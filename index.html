@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+	<!-- Meta tags PWA -->
+	<meta name="theme-color" content="#2c3e50"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-title" content="Plan Digital">
+	<meta name="description" content="Plan de Actuación Digital - IES Virgen de Villadiego">
+	<meta name="keywords" content="educación, digital, plan, actuación, IES, Villadiego">
+	<meta name="author" content="IES Virgen de Villadiego">
+
+	<!-- Manifest -->
+	<link rel="manifest" href="manifest.json">
+
+	<!-- Iconos iOS -->
+	<link rel="apple-touch-icon" href="icons/icon-152x152.png">
+
+	<!-- Icono favicon -->
+	<link rel="icon" type="image/png" href="icons/icon-32x32.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plan de Actuación Digital - IES Virgen de Villadiego</title>
@@ -3283,5 +3301,84 @@
             }
         }
     </script>
+	
+	<script>
+	  // Registrar Service Worker
+	  if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+		  navigator.serviceWorker.register('sw.js')
+			.then(function(registration) {
+			  console.log('ServiceWorker registrado con éxito: ', registration.scope);
+			})
+			.catch(function(error) {
+			  console.log('Error registrando ServiceWorker: ', error);
+			});
+		});
+	  }
+
+	  // Detectar si la app está en modo standalone (PWA)
+	  function isRunningStandalone() {
+		return (window.matchMedia('(display-mode: standalone)').matches) || 
+			   (window.navigator.standalone) || 
+			   (document.referrer.includes('android-app://'));
+	  }
+
+	  // Mostrar botón de instalación
+	  let deferredPrompt;
+	  const installButton = document.createElement('button');
+	  
+	  window.addEventListener('beforeinstallprompt', (e) => {
+		e.preventDefault();
+		deferredPrompt = e;
+		
+		// Crear y mostrar botón de instalación
+		installButton.innerHTML = '<i class="fas fa-download"></i> Instalar App';
+		installButton.style.cssText = `
+		  position: fixed;
+		  bottom: 20px;
+		  right: 20px;
+		  background: var(--success-color);
+		  color: white;
+		  border: none;
+		  padding: 12px 20px;
+		  border-radius: 50px;
+		  cursor: pointer;
+		  font-weight: 600;
+		  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+		  z-index: 1000;
+		  display: flex;
+		  align-items: center;
+		  gap: 8px;
+		`;
+    
+		installButton.addEventListener('click', async () => {
+		  if (!deferredPrompt) return;
+		  
+		  deferredPrompt.prompt();
+		  const { outcome } = await deferredPrompt.userChoice;
+		  
+		  if (outcome === 'accepted') {
+			installButton.style.display = 'none';
+		  }
+		  
+		  deferredPrompt = null;
+		});
+		
+		document.body.appendChild(installButton);
+	  });
+
+	  window.addEventListener('appinstalled', () => {
+		installButton.style.display = 'none';
+		deferredPrompt = null;
+	  });
+
+	  // Ocultar botón si ya está instalado
+	  if (isRunningStandalone()) {
+		if (installButton.parentNode) {
+		  installButton.style.display = 'none';
+		}
+	  }
+	</script>
+	
 </body>
 </html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plan-digital-v1.2';
+const CACHE_NAME = 'plan-digital-v1.3';
 const urlsToCache = [
   '/',
   '/PlaActDig/index.html',

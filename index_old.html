@@ -1,0 +1,3396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<!-- Meta tags PWA -->
+	<meta name="theme-color" content="#2c3e50"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-title" content="Plan Digital">
+	<meta name="description" content="Plan de Actuación Digital - IES Virgen de Villadiego">
+	<meta name="keywords" content="educación, digital, plan, actuación, IES, Villadiego">
+	<meta name="author" content="IES Virgen de Villadiego">
+
+	<!-- Manifest -->
+	<link rel="manifest" href="./manifest.json">
+
+	<!-- Iconos iOS -->
+	<link rel="apple-touch-icon" href="icons/icon-152x152.png">
+
+	<!-- Icono favicon -->
+	<link rel="icon" type="image/png" href="icons/icon-32x32.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Actuación Digital - IES Virgen de Villadiego</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --steam-color: #9b59b6;
+            --steam-light: #bb8fce;
+            --gradient: linear-gradient(135deg, #3498db, #2c3e50);
+            --steam-gradient: linear-gradient(135deg, #9b59b6, #8e44ad);
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Portal de inicio */
+        #portal-inicio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            z-index: 1000;
+            cursor: pointer;
+            padding: 2rem;
+            transition: opacity 0.5s ease;
+        }
+        
+        #portal-inicio.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+                
+        #portal-titulo {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+        
+        #portal-subtitulo {
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        #portal-curso {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        #portal-instruccion {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        /* Contenido de la aplicación */
+        #app-contenido {
+            display: none;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--light-color);
+            position: relative;
+        }
+        
+        /* Navegación */
+        nav {
+            background-color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background: white;
+            color: var(--secondary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .nav-btn.steam {
+            border-color: var(--steam-color);
+        }
+        
+        .nav-btn.steam:hover {
+            background: var(--steam-color);
+            color: white;
+            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.3);
+        }
+        
+        .nav-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-btn.steam.active {
+            background: var(--steam-color);
+        }
+        
+        .nav-btn i {
+            font-size: 1.1rem;
+        }
+        
+        /* Línea divisoria */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 0;
+            border: none;
+        }
+        
+        /* Sección de gestión */
+        .gestion-section {
+            background-color: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .gestion-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .gestion-toggle:hover {
+            color: var(--primary-color);
+        }
+        
+        .gestion-toggle i {
+            transition: transform 0.3s;
+        }
+        
+        .gestion-toggle.open i {
+            transform: rotate(90deg);
+        }
+        
+        .gestion-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .gestion-buttons.open {
+            max-height: 200px;
+        }
+        
+        .gestion-btn {
+            background: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .gestion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .gestion-btn.consultas {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .gestion-btn.pdf {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .gestion-btn.github {
+            background: #6e5494;
+            color: white;
+        }
+        
+        .gestion-btn.datos {
+            background: #f39c12;
+            color: white;
+        }
+        
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+        
+        .section-title.steam {
+            border-bottom-color: var(--steam-color);
+        }
+        
+        /* Cabecera de sección con botón de volver a la derecha */
+        .seccion-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .volver-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            order: 2;
+        }
+        
+        .volver-btn:hover {
+            background: #c0392b;
+            transform: translateX(-5px);
+        }
+        
+        /* Tarjetas de ámbito */
+        .ambitos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .ambito-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .ambito-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .ambito-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .ambito-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .ambito-card h3 i {
+            color: var(--primary-color);
+        }
+        
+        .ambito-card p {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .lineas-count {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Lista de líneas */
+        .lineas-list {
+            list-style-type: none;
+            margin-top: 1.5rem;
+        }
+        
+        .linea-item {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .linea-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        
+        .linea-item:last-child {
+            border-bottom: none;
+        }
+        
+        .linea-badge {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        /* Detalle de línea */
+        .detalle-linea {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .detalle-linea h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        /* Filtros */
+        .filtros {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .filtro-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filtro-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .filtro-btn:hover:not(.active) {
+            background: #d0d0d0;
+        }
+        
+        /* Tareas */
+        .tarea-item {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tarea-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .tarea-item h4 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Estado de tareas */
+        .estado-tarea {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .estado-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .estado-btn.no-iniciado {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        .estado-btn.en-proceso {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .estado-btn.conseguido {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .estado-btn.active {
+            box-shadow: 0 0 0 2px currentColor;
+            transform: scale(1.05);
+        }
+        
+        /* Información adicional */
+        .info-section {
+            margin-top: 2rem;
+        }
+        
+        .info-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-top: 3px solid var(--primary-color);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Consultas */
+        .consultas-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .filtros-avanzados {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .filtro-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filtro-group label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .filtro-select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .filtro-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        /* Resultados */
+        .resultados-consulta {
+            margin-top: 2rem;
+        }
+        
+        .resultado-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+        
+        .resultado-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .badge-ambito {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .badge-tipo {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .badge-trimestre {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .badge-steam {
+            background: var(--steam-color);
+            color: white;
+        }
+        
+        .badge-steam:hover {
+            background: var(--steam-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(155, 89, 182, 0.3);
+        }
+        
+        /* GitHub Gists */
+        .github-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .github-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .token-input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .token-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        .github-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .github-btn:hover {
+            background: #555;
+        }
+        
+        /* PDF Export */
+        .pdf-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .filtros-pdf {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .filtro-pdf-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filtro-pdf-group h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+        }
+        
+        /* Vista STEAM 4.0 */
+        .steam-hero {
+            background: var(--steam-gradient);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .steam-hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .steam-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .steam-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .steam-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--steam-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .steam-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--steam-gradient);
+        }
+        
+        .steam-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .steam-card h3 {
+            color: var(--steam-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .steam-card h3 i {
+            color: var(--steam-color);
+        }
+        
+        .steam-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .steam-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+        }
+        
+        .steam-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .steam-card li i {
+            color: var(--steam-color);
+            margin-top: 0.3rem;
+            flex-shrink: 0;
+        }
+        
+        .steam-integration {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-top: 2rem;
+            border-left: 5px solid var(--steam-color);
+        }
+        
+        .steam-integration h3 {
+            color: var(--steam-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .steam-integration ul {
+            list-style-type: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .steam-integration li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .steam-integration li:last-child {
+            border-bottom: none;
+        }
+        
+        .steam-integration li i {
+            color: var(--steam-color);
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Modal para seleccionar Gists */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+        
+        .gists-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .gist-item {
+            padding: 1.2rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .gist-item:hover {
+            background: #f8f9fa;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .gist-info {
+            flex: 1;
+        }
+        
+        .gist-description {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .gist-meta {
+            font-size: 0.9rem;
+            color: #777;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .gist-date {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .gist-select-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .gist-select-btn:hover {
+            background: #27ae60;
+        }
+        
+        .modal-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .modal-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .modal-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .modal-message.info {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b3d7ff;
+        }
+        
+        /* Modal para datos */
+        .datos-modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .datos-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .datos-btn.exportar {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .datos-btn.importar {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .datos-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* Utilidades */
+        .hidden {
+            display: none;
+        }
+        
+        /* MEJORAS DE RESPONSIVIDAD */
+        
+        /* Dispositivos móviles pequeños */
+        @media (max-width: 480px) {
+            #portal-titulo {
+                font-size: 2rem;
+            }
+            
+            #portal-subtitulo {
+                font-size: 1.4rem;
+            }
+            
+            #portal-curso {
+                font-size: 1.2rem;
+            }
+            
+          
+            
+            header {
+                padding: 1.5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .ambito-card {
+                padding: 1.5rem;
+            }
+            
+            .ambito-card h3 {
+                font-size: 1.3rem;
+            }
+            
+            .linea-item {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.7rem;
+            }
+            
+            .linea-badge {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+            
+            .detalle-linea {
+                padding: 1.5rem;
+            }
+            
+            .tarea-item {
+                padding: 1rem;
+            }
+            
+            .estado-tarea {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .estado-btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-card {
+                padding: 1rem;
+            }
+            
+            .consultas-section,
+            .pdf-section,
+            .github-section {
+                padding: 1.5rem;
+            }
+            
+            .filtros-avanzados,
+            .filtros-pdf {
+                grid-template-columns: 1fr;
+            }
+            
+            .github-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .steam-hero {
+                padding: 2rem 1rem;
+            }
+            
+            .steam-hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .steam-card {
+                padding: 1.5rem;
+            }
+            
+            .steam-integration {
+                padding: 1.5rem;
+            }
+            
+            .steam-integration ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .gist-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .gist-select-btn {
+                align-self: stretch;
+            }
+            
+            .datos-modal-buttons {
+                gap: 0.8rem;
+            }
+            
+            .datos-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .nav-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .gestion-btn {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .volver-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Tablets y móviles grandes */
+        @media (max-width: 768px) {
+            #portal-titulo {
+                font-size: 2.5rem;
+            }
+            
+            #portal-subtitulo {
+                font-size: 1.8rem;
+            }
+            
+            #portal-curso {
+                font-size: 1.5rem;
+            }
+            
+            #escudo-container {
+                width: 80px;
+                height: 120px;
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            .ambitos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .gestion-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .filtros-avanzados {
+                grid-template-columns: 1fr;
+            }
+            
+            .github-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .seccion-cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .volver-btn {
+                align-self: flex-end;
+            }
+            
+            .filtros-pdf {
+                grid-template-columns: 1fr;
+            }
+            
+            .steam-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steam-hero {
+                padding: 2rem 1.5rem;
+            }
+            
+            .steam-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .steam-integration ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .gist-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .gist-select-btn {
+                align-self: flex-end;
+            }
+            
+            .datos-modal-buttons {
+                gap: 0.8rem;
+            }
+            
+            .datos-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Dispositivos muy pequeños (orientación vertical) */
+        @media (max-width: 360px) {
+            #portal-titulo {
+                font-size: 1.8rem;
+            }
+            
+            #portal-subtitulo {
+                font-size: 1.2rem;
+            }
+            
+            #portal-curso {
+                font-size: 1rem;
+            }
+            
+            #portal-instruccion {
+                font-size: 0.9rem;
+            }
+            
+            .ambito-card {
+                padding: 1rem;
+            }
+            
+            .ambito-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .detalle-linea {
+                padding: 1rem;
+            }
+            
+            .tarea-item {
+                padding: 0.8rem;
+            }
+            
+            .consultas-section,
+            .pdf-section,
+            .github-section {
+                padding: 1rem;
+            }
+            
+            .steam-hero {
+                padding: 1.5rem 1rem;
+            }
+            
+            .steam-hero h2 {
+                font-size: 1.5rem;
+            }
+            
+            .steam-card {
+                padding: 1rem;
+            }
+            
+            .steam-integration {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Portal de Inicio -->
+    <div id="portal-inicio">
+        
+        
+        <h1 id="portal-titulo">PLAN DE ACTUACIÓN DIGITAL</h1>
+        <h2 id="portal-subtitulo">IES Virgen de Villadiego</h2>
+        <p id="portal-curso">Curso 2025-2026</p>
+        <p id="portal-instruccion">Haz clic en cualquier parte para continuar</p>
+    </div>
+    
+    <!-- Contenido de la aplicación -->
+    <div id="app-contenido">
+        <header>
+            <h1>PLAN DE ACTUACIÓN DIGITAL</h1>
+            <h2>IES Virgen de Villadiego</h2>
+        </header>
+        
+        <nav>
+            <button class="nav-btn" id="btn-inicio">
+                <i class="fas fa-home"></i> Inicio
+            </button>
+            <button class="nav-btn" id="btn-organizacion">
+                <i class="fas fa-building"></i> Organización del Centro
+            </button>
+            <button class="nav-btn" id="btn-informacion">
+                <i class="fas fa-comments"></i> Información y Comunicación
+            </button>
+            <button class="nav-btn" id="btn-procesos">
+                <i class="fas fa-graduation-cap"></i> Procesos de Enseñanza Aprendizaje
+            </button>
+            <button class="nav-btn steam" id="btn-steam">
+                <i class="fas fa-robot"></i> STEAM 4.0
+            </button>
+        </nav>
+        
+        <!-- Línea divisoria -->
+        <hr class="divider">
+        
+        <!-- Sección de gestión -->
+        <div class="gestion-section">
+            <div class="gestion-toggle" id="gestion-toggle">
+                <i class="fas fa-chevron-right"></i>
+                <span>GESTIÓN</span>
+            </div>
+            <div class="gestion-buttons" id="gestion-buttons">
+                <button class="gestion-btn consultas" id="btn-consultas">
+                    <i class="fas fa-search"></i> Consultas
+                </button>
+                <button class="gestion-btn pdf" id="btn-pdf">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+                <button class="gestion-btn github" id="btn-github">
+                    <i class="fab fa-github"></i> GitHub Gists
+                </button>
+                <button class="gestion-btn datos" id="btn-datos">
+                    <i class="fas fa-database"></i> Datos
+                </button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- Vista de inicio -->
+            <div id="vista-inicio">
+                <h2 class="section-title">Bienvenido al Plan de Actuación Digital</h2>
+                <p>Selecciona un ámbito para ver sus líneas de actuación o utiliza el menú de navegación superior.</p>
+                
+                <div class="ambitos-grid">
+                    <div class="ambito-card" data-ambito="organizacion">
+                        <h3><i class="fas fa-building"></i> Organización del Centro</h3>
+                        <p>Líneas de actuación relacionadas con la gestión, recursos y formación del centro.</p>
+                        <div class="lineas-count">4 líneas de actuación</div>
+                    </div>
+                    
+                    <div class="ambito-card" data-ambito="informacion">
+                        <h3><i class="fas fa-comments"></i> Información y Comunicación</h3>
+                        <p>Líneas de actuación relacionadas con la comunicación interna y externa del centro.</p>
+                        <div class="lineas-count">3 líneas de actuación</div>
+                    </div>
+                    
+                    <div class="ambito-card" data-ambito="procesos">
+                        <h3><i class="fas fa-graduation-cap"></i> Procesos de Enseñanza Aprendizaje</h3>
+                        <p>Líneas de actuación relacionadas con metodologías, recursos y evaluación educativa.</p>
+                        <div class="lineas-count">5 líneas de actuación</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de líneas de actuación por ámbito -->
+            <div id="vista-lineas" class="hidden">
+                <div class="seccion-cabecera">
+                    <h2 class="section-title" id="titulo-ambito"></h2>
+                    <button class="volver-btn" id="volver-lineas">
+                        <i class="fas fa-arrow-left"></i> Volver a ámbitos
+                    </button>
+                </div>
+                <ul class="lineas-list" id="lista-lineas"></ul>
+            </div>
+            
+            <!-- Vista de detalle de línea de actuación -->
+            <div id="vista-detalle" class="hidden">
+                <div class="seccion-cabecera">
+                    <h2 class="section-title" id="titulo-linea"></h2>
+                    <button class="volver-btn" id="volver-detalle">
+                        <i class="fas fa-arrow-left"></i> Volver a líneas
+                    </button>
+                </div>
+                
+                <div class="filtros">
+                    <button class="filtro-btn active" data-tipo="todas">
+                        <i class="fas fa-list"></i> Todas las tareas
+                    </button>
+                    <button class="filtro-btn" data-tipo="formacion">
+                        <i class="fas fa-chalkboard-teacher"></i> Formación
+                    </button>
+                    <button class="filtro-btn" data-tipo="intervencion">
+                        <i class="fas fa-tasks"></i> Actuaciones en el centro
+                    </button>
+                </div>
+                
+                <div id="tareas-lista"></div>
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Información adicional</h3>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h4><i class="fas fa-clipboard-check"></i> Evaluación</h4>
+                            <p id="evaluacion-objeto"></p>
+                            <p><strong>Herramientas:</strong> <span id="evaluacion-herramientas"></span></p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h4><i class="fas fa-users"></i> Responsables</h4>
+                            <ul id="responsables-lista"></ul>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h4><i class="fas fa-calendar-alt"></i> Temporalización</h4>
+                            <ul id="temporalizacion-lista"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de STEAM 4.0 -->
+            <div id="vista-steam" class="hidden">
+                <div class="seccion-cabecera">
+                    <h2 class="section-title steam">Proyecto STEAM 4.0</h2>
+                    <button class="volver-btn" id="volver-steam">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </button>
+                </div>
+                
+                <div class="steam-hero">
+                    <h2><i class="fas fa-robot"></i> Proyecto STEAM 4.0</h2>
+                    <p>Integración de Ciencia, Tecnología, Ingeniería, Arte y Matemáticas con la Transformación Digital en el IES Virgen de Villadiego</p>
+                </div>
+                
+                <h3 class="section-title steam">Objetivos del Proyecto</h3>
+                
+                <div class="steam-grid">
+                    <div class="steam-card">
+                        <h3><i class="fas fa-user-graduate"></i> Mejora de Competencias</h3>
+                        <ul>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Mejorar la capacitación en competencia digital del alumnado renovando el cuadro de herramientas TDE</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>Integrar los elementos propios de STEAM 4.0 en el proceso de enseñanza-aprendizaje</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="steam-card">
+                        <h3><i class="fas fa-laptop-code"></i> Actividades Específicas</h3>
+                        <ul>
+                            <li>
+                                <i class="fas fa-brain"></i>
+                                <span>Desarrollar el pensamiento computacional en el alumnado</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-code"></i>
+                                <span>Fomentar la programación como herramienta de resolución de problemas</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-robot"></i>
+                                <span>Introducir a los estudiantes en el mundo de la robótica educativa</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-brain"></i>
+                                <span>Promover el uso ético de la inteligencia artificial</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="steam-card">
+                        <h3><i class="fas fa-chalkboard-teacher"></i> Desarrollo Profesional</h3>
+                        <ul>
+                            <li>
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Elaborar situaciones de aprendizaje que incorporen progresivamente los elementos STEAM</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-share-alt"></i>
+                                <span>Difundir entre el claustro de profesorado buenas prácticas relacionadas con STEAM</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Actualizar las metodologías de enseñanza con enfoque STEAM</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="steam-integration">
+                    <h3><i class="fas fa-link"></i> Integración en el Plan de Actuación Digital</h3>
+                    <p>El Proyecto STEAM 4.0 se integra en las siguientes líneas de actuación del Plan Digital:</p>
+                    <ul>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <span><strong>Organización del Centro:</strong> Líneas 1 y 3</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <span><strong>Procesos de Enseñanza Aprendizaje:</strong> Líneas 2 y 4</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-robot"></i>
+                            <span><strong>Recursos Tecnológicos:</strong> Kits de robótica, placas de desarrollo y herramientas de programación</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="steam-integration">
+                    <h3><i class="fas fa-graduation-cap"></i> Integración Curricular</h3>
+                    <p>El proyecto se integra en las siguientes áreas y materias del currículo:</p>
+                    <ul>
+                        <li>
+                            <i class="fas fa-seedling"></i>
+                            <span>Biología y Geología</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-robot"></i>
+                            <span>Computación y Robótica</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-flask"></i>
+                            <span>Cultura Científica</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-laptop-code"></i>
+                            <span>Digitalización</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-running"></i>
+                            <span>Educación Física</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-atom"></i>
+                            <span>Física y Química</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-globe-americas"></i>
+                            <span>Geografía e Historia</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-book"></i>
+                            <span>Lengua Castellana y Literatura</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-language"></i>
+                            <span>Lengua Extranjera</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-calculator"></i>
+                            <span>Matemáticas</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-music"></i>
+                            <span>Música</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-tools"></i>
+                            <span>Tecnología</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-palette"></i>
+                            <span>Educación Plástica, Visual y Audiovisual</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-paint-brush"></i>
+                            <span>Expresión Artística</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-ruler-combined"></i>
+                            <span>Dibujo técnico</span>
+                        </li>
+                    </ul>
+                </div>
+				
+				<div class="steam-integration">
+					<h3><i class="fas fa-book"></i> Guía STEAM 4.0</h3>
+					<p>Accede a la guía oficial para la elaboración de proyectos STEAM 4.0 en Educación Secundaria.</p>
+					<a href="https://edea.juntadeandalucia.es/bancorecursos/file/294696ff-8ecf-4dc2-93ed-19c167838eef/1/250919_Guia4.0_Secundaria%282%29.zip/250919_Guia4.0_Secundaria/index.html" 
+					   target="_blank" 
+					   class="gestion-btn consultas" 
+					   style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; margin-top: 1rem;">
+						<i class="fas fa-external-link-alt"></i> Abrir Guía STEAM 4.0
+					</a>
+				</div>
+				
+            </div>
+            
+            <!-- Vista de consultas -->
+            <div id="vista-consultas" class="hidden">
+                <h2 class="section-title">Consultas del Plan de Actuación Digital</h2>
+                <p>Utiliza los filtros para buscar tareas específicas por responsables o trimestres.</p>
+                
+                <div class="consultas-section">
+                    <h3><i class="fas fa-filter"></i> Filtros de búsqueda</h3>
+                    
+                    <div class="filtros-avanzados">
+                        <div class="filtro-group">
+                            <label for="filtro-ambito">Ámbito:</label>
+                            <select id="filtro-ambito" class="filtro-select">
+                                <option value="todos">Todos los ámbitos</option>
+                                <option value="organizacion">Organización del Centro</option>
+                                <option value="informacion">Información y Comunicación</option>
+                                <option value="procesos">Procesos de Enseñanza Aprendizaje</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filtro-group">
+                            <label for="filtro-responsable">Responsable:</label>
+                            <select id="filtro-responsable" class="filtro-select">
+                                <option value="todos">Todos los responsables</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filtro-group">
+                            <label for="filtro-trimestre">Trimestre:</label>
+                            <select id="filtro-trimestre" class="filtro-select">
+                                <option value="todos">Todos los trimestres</option>
+                                <option value="Primer trimestre">Primer trimestre</option>
+                                <option value="Segundo trimestre">Segundo trimestre</option>
+                                <option value="Tercer trimestre">Tercer trimestre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filtro-group">
+                            <label for="filtro-tipo">Tipo de tarea:</label>
+                            <select id="filtro-tipo" class="filtro-select">
+                                <option value="todos">Todos los tipos</option>
+                                <option value="formacion">Formación</option>
+                                <option value="intervencion">Actuaciones en el centro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="volver-btn" id="btn-buscar" style="background: var(--success-color);">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    
+                    <div class="resultados-consulta" id="resultados-consulta">
+                        <!-- Los resultados de la búsqueda aparecerán aquí -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de exportación PDF -->
+            <div id="vista-pdf" class="hidden">
+                <div class="seccion-cabecera">
+                    <h2 class="section-title">Exportar tareas a PDF</h2>
+                    <button class="volver-btn" id="volver-pdf">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </button>
+                </div>
+                <p>Selecciona los filtros para generar un PDF con las tareas del plan de actuación digital.</p>
+                
+                <div class="pdf-section">
+                    <h3><i class="fas fa-filter"></i> Filtros de exportación</h3>
+                    
+                    <div class="filtros-pdf">
+                        <div class="filtro-pdf-group">
+                            <h4>Estados de tareas</h4>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-no-iniciado" checked>
+                                    <label for="pdf-no-iniciado">No iniciado</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-en-proceso" checked>
+                                    <label for="pdf-en-proceso">En proceso</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-conseguido" checked>
+                                    <label for="pdf-conseguido">Conseguido</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filtro-pdf-group">
+                            <h4>Ámbitos</h4>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-organizacion" checked>
+                                    <label for="pdf-organizacion">Organización del Centro</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-informacion" checked>
+                                    <label for="pdf-informacion">Información y Comunicación</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-procesos" checked>
+                                    <label for="pdf-procesos">Procesos de Enseñanza Aprendizaje</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filtro-pdf-group">
+                            <h4>Tipo de tarea</h4>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-formacion" checked>
+                                    <label for="pdf-formacion">Formación</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf-intervencion" checked>
+                                    <label for="pdf-intervencion">Actuaciones en el centro</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="gestion-btn pdf" id="btn-generar-pdf">
+                        <i class="fas fa-file-pdf"></i> Generar PDF
+                    </button>
+                    
+                    <div id="pdf-mensaje" style="margin-top: 1rem;"></div>
+                </div>
+            </div>
+            
+            <!-- Vista de GitHub Gists -->
+            <div id="vista-github" class="hidden">
+                <div class="seccion-cabecera">
+                    <h2 class="section-title">GitHub Gists</h2>
+                    <button class="volver-btn" id="volver-github">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </button>
+                </div>
+                <p>Guarda y recupera el estado de las tareas desde GitHub Gists usando un token de acceso personal.</p>
+                
+                <div class="github-section">
+                    <h3><i class="fab fa-github"></i> Configuración de GitHub</h3>
+                    <p>Introduce tu token de acceso personal de GitHub para guardar y cargar el estado de las tareas.</p>
+                    
+                    <div class="github-form">
+                        <input type="password" id="github-token" class="token-input" placeholder="Token de acceso personal de GitHub">
+                        <button class="github-btn" id="btn-guardar-token">
+                            <i class="fas fa-save"></i> Guardar Token
+                        </button>
+                    </div>
+                    
+                    <div class="acciones-globales" style="margin-top: 2rem;">
+                        <button class="gestion-btn github" id="btn-exportar-github">
+                            <i class="fas fa-cloud-upload-alt"></i> Guardar en GitHub Gists
+                        </button>
+                        <button class="gestion-btn github" id="btn-importar-github">
+                            <i class="fas fa-cloud-download-alt"></i> Cargar desde GitHub Gists
+                        </button>
+                    </div>
+                    
+                    <div id="github-mensaje" style="margin-top: 1rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar Gists -->
+    <div class="modal-overlay" id="modal-gists">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Seleccionar Gist para importar</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div id="modal-message" class="modal-message hidden"></div>
+            <ul class="gists-list" id="gists-list">
+                <!-- Los Gists se cargarán aquí dinámicamente -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Modal para Datos -->
+    <div class="modal-overlay" id="modal-datos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Gestión de Datos</h3>
+                <button class="modal-close" id="modal-datos-close">&times;</button>
+            </div>
+            <p>Exporta o importa los datos del plan de actuación digital en formato JSON.</p>
+            
+            <div class="datos-modal-buttons">
+                <button class="datos-btn exportar" id="btn-exportar-json">
+                    <i class="fas fa-file-export"></i> Exportar .json
+                </button>
+                <button class="datos-btn importar" id="btn-importar-json">
+                    <i class="fas fa-file-import"></i> Importar .json
+                </button>
+                <input type="file" id="importar-archivo-json" accept=".json" class="hidden">
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Datos del plan de actuación digital - CORREGIDOS según STEAM 4.0
+        const planData = {
+            organizacion: {
+                titulo: "ÁMBITO: Organización del Centro",
+                lineas: [
+                    {
+                        id: 1,
+                        titulo: "Creación de un panel en una aplicación Web 2.0 para centralizar recursos educativos",
+                        descripcion: "Creación de un panel en una aplicación Web 2.0 para centralizar recursos educativos aportados por los docentes del centro y difundir la existencia de comunidades educativas en red.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Creación del panel y aporte de contenidos.",
+                            "Difusión en web del centro y en el Site de uso habitual entre el profesorado del centro denominado 'Cosas de profes'."
+                        ],
+                        evaluacion: {
+                            objeto: "Análisis del panel desde la coordinaciones TDE y Escuela 4.0.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo directivo", "Equipo de coordinación", "Profesorado", "PAS"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: true
+                    },
+                    {
+                        id: 2,
+                        titulo: "Diseñar un plan de formación para padres y madres",
+                        descripcion: "Diseñar un plan de formación para padres y madres de la comunidad educativa que fomente la competencia digital.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Formación para las familias en la escuela de padres y madres sobre la herramienta iPasen y RRSS."
+                        ],
+                        evaluacion: {
+                            objeto: "Encuesta de satisfacción de los participantes de la formación.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo de coordinación", "Familias"],
+                        temporalizacion: ["Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    },
+                    {
+                        id: 3,
+                        titulo: "Gestión de la dotación del Programa Código Escuela 4.0",
+                        descripcion: "Gestión de la dotación del Programa Código Escuela 4.0.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Actualización del inventario del centro."
+                        ],
+                        evaluacion: {
+                            objeto: "Consulta del registro de inventario.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Registro de inventario Séneca"
+                        },
+                        responsables: ["Equipo de coordinación"],
+                        temporalizacion: ["Tercer trimestre"],
+                        steam4: true
+                    },
+                    {
+                        id: 4,
+                        titulo: "Impulso desde el FOREVIN la participación del profesorado en comunidades educativas en red",
+                        descripcion: "Impulso desde el FOREVIN la participación del profesorado en comunidades educativas en red.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Incluir enlaces a comunidades educativas en red en el panel en una aplicación web 2.0 de la línea de actuación 1 de este ámbito."
+                        ],
+                        evaluacion: {
+                            objeto: "Análisis del panel desde las coordinaciones.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo directivo", "Equipo de coordinación", "Profesorado", "Departamento FOREVIN"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    }
+                ]
+            },
+            informacion: {
+                titulo: "ÁMBITO: Información y Comunicación",
+                lineas: [
+                    {
+                        id: 1,
+                        titulo: "Potenciar el uso de iPasen entre las familias",
+                        descripcion: "Potenciar el uso de iPasen entre las familias.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Derivar las convocatorias y tutorías a mensajería interna de iPasen.",
+                            "Potenciar las consultas del cuaderno de Séneca por parte de las familias."
+                        ],
+                        evaluacion: {
+                            objeto: "Se desarrollará a través de la encuesta de satisfacción que se realiza a final de curso.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo directivo", "Equipo de coordinación", "Profesorado", "Familias"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    },
+                    {
+                        id: 2,
+                        titulo: "Mantener la presencia del centro en Facebook y web del centro",
+                        descripcion: "Mantener la presencia del centro en Facebook y web del centro y potenciar el feedback de todos los miembros de la comunidad educativa.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Activar los comentarios en las publicaciones de Facebook y web del centro."
+                        ],
+                        evaluacion: {
+                            objeto: "Encuesta de satisfacción a final de curso.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo de coordinación", "Profesorado", "Familias", "Community manager"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    },
+                    {
+                        id: 3,
+                        titulo: "Promover la participación de la comunidad educativa en el tablón de anuncios de iPasen",
+                        descripcion: "Promover la participación de la comunidad educativa en el tablón de anuncios de iPasen.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Tutorial: ¿Cómo se hace?",
+                            "Difusión del tutorial.",
+                            "Gestión de las publicaciones."
+                        ],
+                        evaluacion: {
+                            objeto: "Estadística de las publicaciones no realizadas por el equipo directivo.",
+                            herramientas: "Formulario, Encuesta, Estadísticas"
+                        },
+                        responsables: ["Equipo directivo", "Equipo de coordinación", "Profesorado", "Alumnado", "PAS", "Familias", "CEP"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    }
+                ]
+            },
+            procesos: {
+                titulo: "ÁMBITO: Procesos de Enseñanza Aprendizaje",
+                lineas: [
+                    {
+                        id: 1,
+                        titulo: "Promover el uso de recursos educativos abiertos (REA) en las diferentes materias",
+                        descripcion: "Promover el uso de recursos educativos abiertos (REA) en las diferentes materias",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Información al profesorado durante un claustro extraordinario.",
+                            "Aportación de situaciones de aprendizaje al repositorio del centro alojado en Séneca."
+                        ],
+                        evaluacion: {
+                            objeto: "Acta del claustro. Repositorio de SdA de Séneca.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Acta del claustro, Repositorio de SdA de Séneca"
+                        },
+                        responsables: ["Equipo de coordinación", "Profesorado"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    },
+                    {
+                        id: 2,
+                        titulo: "Actualización del cuadro de trabajo de herramientas TDE",
+                        descripcion: "Actualización del cuadro de trabajo de herramientas TDE.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Actualización del cuadro incluyendo Classroom, Drive, Genially, Canva y herramientas de IA.",
+                            "Información en claustro extraordinario."
+                        ],
+                        evaluacion: {
+                            objeto: "Evidencia de existencia del documento con el cuadro. Acta de claustro.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Acta de claustro"
+                        },
+                        responsables: ["Equipo de coordinación", "Profesorado", "Departamento FOREVIN"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre"],
+                        steam4: true
+                    },
+                    {
+                        id: 3,
+                        titulo: "Promover la autoevaluación y la evaluación entre iguales",
+                        descripcion: "Promover la autoevaluación y la evaluación entre iguales así como el trabajo cooperativo y colaborativo.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Realizar, al menos, una tarea al trimestre en el que se incluya un trabajo cooperativo o colaborativo.",
+                            "Realizar, al menos, una tarea al trimestre en el que se incluya un apartado de evaluación entre iguales y otra de autoevaluación del alumnado"
+                        ],
+                        evaluacion: {
+                            objeto: "Registro en las programaciones de los departamentos.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Registro de las SdA"
+                        },
+                        responsables: ["Equipo directivo", "Equipo de coordinación", "Profesorado", "Alumnado", "PAS", "Familias", "CEP"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    },
+                    {
+                        id: 4,
+                        titulo: "Desarrollo del pensamiento computacional, la programación, la robótica y el uso ético de la IA",
+                        descripcion: "Desarrollo del pensamiento computacional, la programación, la robótica y el uso ético de la IA.",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Vincular actuaciones al plan de razonamiento matemático.",
+                            "Actualizar las programaciones didácticas.",
+                            "Puesta en práctica en el aula de una SdA que incluya estas características."
+                        ],
+                        evaluacion: {
+                            objeto: "Revisión de las programaciones didácticas.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Actas de los departamentos, Registro individual del profesorado, Repositorio de SdA de Séneca"
+                        },
+                        responsables: ["Equipo de coordinación", "Profesorado"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: true
+                    },
+                    {
+                        id: 5,
+                        titulo: "Promover el uso de metodologías activas para el alumnado",
+                        descripcion: "Promover el uso de metodologías activas para el alumnado que impliquen herramientas TDE y dar a conocer a la comunidad educativa, las áreas y competencias de la competencia digital en sus diferentes marcos (Organización Educativa, Docente y Ciudadana)",
+                        tareasFormacion: [],
+                        tareasIntervencion: [
+                            "Alojar en un servicio web 2.0 un repositorio de los distintos tipos de metodologías activas, accesible desde la web del profesorado del centro.",
+                            "Realizar una tarea por materia utilizando alguna de las metodologías activas.",
+                            "Difundir su existencia y verificar su uso por parte del profesorado.",
+                            "Utilizar una infografía por materia para transmitir algún tipo de saber al o entre el alumnado.",
+                            "Publicar en la web del centro áreas y competencias de la competencia digital en sus diferentes marcos (organización educativa, docente y ciudadana)"
+                        ],
+                        evaluacion: {
+                            objeto: "Aplicación web 2.0 seleccionada, con el tablero que contiene la información. Se recopilarán las tareas e infografías elaboradas en las diferentes materias.",
+                            herramientas: "Formulario, Encuesta, Estadísticas, Registros de la aplicación 2.0 utilizada, Materiales elaborados (tareas e infografías), Entrada en la página web del centro"
+                        },
+                        responsables: ["Equipo de coordinación", "Profesorado"],
+                        temporalizacion: ["Primer trimestre", "Segundo trimestre", "Tercer trimestre"],
+                        steam4: false
+                    }
+                ]
+            }
+        };
+
+        // Variables de estado
+        let ambitoActual = '';
+        let lineaActual = null;
+        let filtroActual = 'todas';
+        let estadosTareas = JSON.parse(localStorage.getItem('estadosTareas')) || {};
+        let githubToken = localStorage.getItem('githubToken') || '';
+        let botonesActivos = {
+            organizacion: false,
+            informacion: false,
+            procesos: false,
+            steam: false,
+            consultas: false,
+            pdf: false,
+            github: false
+        };
+
+        // Elementos del DOM
+        const portalInicio = document.getElementById('portal-inicio');
+        const appContenido = document.getElementById('app-contenido');
+        const vistas = {
+            inicio: document.getElementById('vista-inicio'),
+            lineas: document.getElementById('vista-lineas'),
+            detalle: document.getElementById('vista-detalle'),
+            steam: document.getElementById('vista-steam'),
+            consultas: document.getElementById('vista-consultas'),
+            pdf: document.getElementById('vista-pdf'),
+            github: document.getElementById('vista-github')
+        };
+        const tituloAmbito = document.getElementById('titulo-ambito');
+        const listaLineas = document.getElementById('lista-lineas');
+        const tituloLinea = document.getElementById('titulo-linea');
+        const tareasLista = document.getElementById('tareas-lista');
+        const evaluacionObjeto = document.getElementById('evaluacion-objeto');
+        const evaluacionHerramientas = document.getElementById('evaluacion-herramientas');
+        const responsablesLista = document.getElementById('responsables-lista');
+        const temporalizacionLista = document.getElementById('temporalizacion-lista');
+        const resultadosConsulta = document.getElementById('resultados-consulta');
+        const githubTokenInput = document.getElementById('github-token');
+        const githubMensaje = document.getElementById('github-mensaje');
+        const pdfMensaje = document.getElementById('pdf-mensaje');
+        
+        // Elementos del modal
+        const modalGists = document.getElementById('modal-gists');
+        const modalClose = document.getElementById('modal-close');
+        const gistsList = document.getElementById('gists-list');
+        const modalMessage = document.getElementById('modal-message');
+        
+        // Elementos de la sección de gestión
+        const gestionToggle = document.getElementById('gestion-toggle');
+        const gestionButtons = document.getElementById('gestion-buttons');
+        
+        // Elementos del modal de datos
+        const modalDatos = document.getElementById('modal-datos');
+        const modalDatosClose = document.getElementById('modal-datos-close');
+        const btnExportarJson = document.getElementById('btn-exportar-json');
+        const btnImportarJson = document.getElementById('btn-importar-json');
+        const importarArchivoJson = document.getElementById('importar-archivo-json');
+
+        // Inicialización de la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarEventListeners();
+            inicializarFiltroResponsables();
+            if (githubToken) {
+                githubTokenInput.value = githubToken;
+            }
+        });
+
+        // Inicialización de event listeners
+        function inicializarEventListeners() {
+            // Portal de inicio
+            portalInicio.addEventListener('click', function() {
+                portalInicio.classList.add('fade-out');
+                setTimeout(function() {
+                    portalInicio.style.display = 'none';
+                    appContenido.style.display = 'block';
+                }, 500);
+            });
+            
+            // Navegación por botones
+            document.getElementById('btn-inicio').addEventListener('click', mostrarInicio);
+            document.getElementById('btn-organizacion').addEventListener('click', toggleAmbito.bind(null, 'organizacion'));
+            document.getElementById('btn-informacion').addEventListener('click', toggleAmbito.bind(null, 'informacion'));
+            document.getElementById('btn-procesos').addEventListener('click', toggleAmbito.bind(null, 'procesos'));
+            document.getElementById('btn-steam').addEventListener('click', toggleSteam);
+            
+            // Botones de gestión
+            document.getElementById('btn-consultas').addEventListener('click', toggleConsultas);
+            document.getElementById('btn-pdf').addEventListener('click', togglePDF);
+            document.getElementById('btn-github').addEventListener('click', toggleGitHub);
+            document.getElementById('btn-datos').addEventListener('click', mostrarModalDatos);
+            
+            // Navegación por tarjetas
+            document.querySelectorAll('.ambito-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const ambito = this.getAttribute('data-ambito');
+                    mostrarAmbito(ambito);
+                });
+            });
+            
+            // Botones de volver
+            document.getElementById('volver-lineas').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-detalle').addEventListener('click', () => mostrarLineasAmbito(ambitoActual));
+            document.getElementById('volver-steam').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-pdf').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-github').addEventListener('click', mostrarInicio);
+            
+            // Filtros de tareas
+            document.querySelectorAll('.filtro-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filtroActual = this.getAttribute('data-tipo');
+                    mostrarTareasLinea();
+                });
+            });
+            
+            // Botón de búsqueda en consultas
+            document.getElementById('btn-buscar').addEventListener('click', realizarBusqueda);
+            
+            // Botones de GitHub
+            document.getElementById('btn-guardar-token').addEventListener('click', guardarTokenGitHub);
+            document.getElementById('btn-exportar-github').addEventListener('click', exportarGitHub);
+            document.getElementById('btn-importar-github').addEventListener('click', mostrarModalGists);
+            
+            // Botón de generación de PDF
+            document.getElementById('btn-generar-pdf').addEventListener('click', generarPDF);
+            
+            // Eventos del modal de Gists
+            modalClose.addEventListener('click', cerrarModalGists);
+            modalGists.addEventListener('click', function(e) {
+                if (e.target === modalGists) {
+                    cerrarModalGists();
+                }
+            });
+            
+            // Eventos del modal de Datos
+            modalDatosClose.addEventListener('click', cerrarModalDatos);
+            modalDatos.addEventListener('click', function(e) {
+                if (e.target === modalDatos) {
+                    cerrarModalDatos();
+                }
+            });
+            
+            // Botones del modal de Datos
+            btnExportarJson.addEventListener('click', exportarJson);
+            btnImportarJson.addEventListener('click', () => importarArchivoJson.click());
+            importarArchivoJson.addEventListener('change', importarJson);
+            
+            // Toggle de la sección de gestión
+            gestionToggle.addEventListener('click', function() {
+                this.classList.toggle('open');
+                gestionButtons.classList.toggle('open');
+            });
+        }
+
+        // Funciones de navegación
+        function mostrarInicio() {
+            ocultarTodasLasVistas();
+            vistas.inicio.classList.remove('hidden');
+            ambitoActual = '';
+            lineaActual = null;
+            resetearBotonesActivos();
+        }
+
+        function toggleAmbito(ambito) {
+            if (botonesActivos[ambito]) {
+                mostrarInicio();
+            } else {
+                resetearBotonesActivos();
+                botonesActivos[ambito] = true;
+                document.getElementById(`btn-${ambito}`).classList.add('active');
+                mostrarAmbito(ambito);
+            }
+        }
+
+        function toggleSteam() {
+            if (botonesActivos.steam) {
+                mostrarInicio();
+            } else {
+                resetearBotonesActivos();
+                botonesActivos.steam = true;
+                document.getElementById('btn-steam').classList.add('active');
+                mostrarSteam();
+            }
+        }
+
+        function toggleConsultas() {
+            if (botonesActivos.consultas) {
+                mostrarInicio();
+            } else {
+                resetearBotonesActivos();
+                botonesActivos.consultas = true;
+                mostrarConsultas();
+            }
+        }
+
+        function togglePDF() {
+            if (botonesActivos.pdf) {
+                mostrarInicio();
+            } else {
+                resetearBotonesActivos();
+                botonesActivos.pdf = true;
+                mostrarPDF();
+            }
+        }
+
+        function toggleGitHub() {
+            if (botonesActivos.github) {
+                mostrarInicio();
+            } else {
+                resetearBotonesActivos();
+                botonesActivos.github = true;
+                mostrarGitHub();
+            }
+        }
+
+        function resetearBotonesActivos() {
+            for (let boton in botonesActivos) {
+                botonesActivos[boton] = false;
+                if (document.getElementById(`btn-${boton}`)) {
+                    document.getElementById(`btn-${boton}`).classList.remove('active');
+                }
+            }
+        }
+
+        function mostrarAmbito(ambito) {
+            ambitoActual = ambito;
+            tituloAmbito.textContent = planData[ambito].titulo;
+            
+            // Limpiar lista de líneas
+            listaLineas.innerHTML = '';
+            
+            // Añadir líneas al listado
+            planData[ambito].lineas.forEach(linea => {
+                const li = document.createElement('li');
+                li.className = 'linea-item';
+                
+                const badge = document.createElement('div');
+                badge.className = 'linea-badge';
+                badge.textContent = linea.id;
+                
+                const contenido = document.createElement('div');
+                contenido.style.flex = '1';
+                
+                const titulo = document.createElement('div');
+                titulo.textContent = linea.titulo;
+                titulo.style.fontWeight = '600';
+                titulo.style.marginBottom = '0.3rem';
+                
+                const detalles = document.createElement('div');
+                detalles.style.display = 'flex';
+                detalles.style.gap = '0.5rem';
+                detalles.style.flexWrap = 'wrap';
+                
+                // Añadir badge STEAM 4.0 si corresponde (ahora es un botón)
+                if (linea.steam4) {
+                    const steamBadge = document.createElement('span');
+                    steamBadge.className = 'badge badge-steam';
+                    steamBadge.innerHTML = '<i class="fas fa-robot"></i> STEAM 4.0';
+                    steamBadge.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Evita que se active el clic en la línea
+                        mostrarSteam();
+                    });
+                    detalles.appendChild(steamBadge);
+                }
+                
+                contenido.appendChild(titulo);
+                contenido.appendChild(detalles);
+                
+                li.appendChild(badge);
+                li.appendChild(contenido);
+                li.addEventListener('click', () => mostrarDetalleLinea(linea));
+                listaLineas.appendChild(li);
+            });
+            
+            // Mostrar vista de líneas
+            ocultarTodasLasVistas();
+            vistas.lineas.classList.remove('hidden');
+        }
+
+        function mostrarLineasAmbito(ambito) {
+            mostrarAmbito(ambito);
+        }
+
+        function mostrarDetalleLinea(linea) {
+            lineaActual = linea;
+            tituloLinea.textContent = `Línea ${linea.id}: ${linea.titulo}`;
+            
+            // Mostrar descripción
+            const descripcion = document.createElement('p');
+            descripcion.textContent = linea.descripcion;
+            descripcion.style.marginBottom = '1.5rem';
+            descripcion.style.fontSize = '1.1rem';
+            descripcion.style.color = '#555';
+            tareasLista.innerHTML = '';
+            tareasLista.appendChild(descripcion);
+            
+            // Mostrar indicador STEAM 4.0 si corresponde (ahora es un botón)
+            if (linea.steam4) {
+                const steamBadge = document.createElement('div');
+                steamBadge.className = 'badge badge-steam';
+                steamBadge.style.fontSize = '1rem';
+                steamBadge.style.padding = '0.7rem 1.2rem';
+                steamBadge.style.marginBottom = '1.5rem';
+                steamBadge.style.cursor = 'pointer';
+                steamBadge.innerHTML = '<i class="fas fa-robot"></i> Esta línea está vinculada al Proyecto STEAM 4.0';
+                steamBadge.addEventListener('click', mostrarSteam);
+                tareasLista.appendChild(steamBadge);
+            }
+            
+            // Mostrar tareas según filtro
+            mostrarTareasLinea();
+            
+            // Mostrar información de evaluación
+            evaluacionObjeto.textContent = linea.evaluacion.objeto;
+            evaluacionHerramientas.textContent = linea.evaluacion.herramientas;
+            
+            // Mostrar responsables
+            responsablesLista.innerHTML = '';
+            linea.responsables.forEach(responsable => {
+                const li = document.createElement('li');
+                li.textContent = responsable;
+                li.style.padding = '0.3rem 0';
+                responsablesLista.appendChild(li);
+            });
+            
+            // Mostrar temporalización
+            temporalizacionLista.innerHTML = '';
+            linea.temporalizacion.forEach(trimestre => {
+                const li = document.createElement('li');
+                li.textContent = trimestre;
+                li.style.padding = '0.3rem 0';
+                temporalizacionLista.appendChild(li);
+            });
+            
+            // Mostrar vista de detalle
+            ocultarTodasLasVistas();
+            vistas.detalle.classList.remove('hidden');
+        }
+
+        function mostrarSteam() {
+            ocultarTodasLasVistas();
+            vistas.steam.classList.remove('hidden');
+        }
+
+        function mostrarTareasLinea() {
+            if (!lineaActual) return;
+            
+            // Limpiar tareas (excepto la descripción y el badge STEAM)
+            const descripcion = tareasLista.firstChild;
+            const steamBadge = tareasLista.children[1]?.classList.contains('badge-steam') ? tareasLista.children[1] : null;
+            tareasLista.innerHTML = '';
+            tareasLista.appendChild(descripcion);
+            if (steamBadge) tareasLista.appendChild(steamBadge);
+            
+            // Mostrar tareas según el filtro
+            if (filtroActual === 'todas' || filtroActual === 'formacion') {
+                if (lineaActual.tareasFormacion && lineaActual.tareasFormacion.length > 0) {
+                    const tituloFormacion = document.createElement('h3');
+                    tituloFormacion.textContent = 'Tareas de Formación';
+                    tituloFormacion.style.marginTop = '1.5rem';
+                    tituloFormacion.style.marginBottom = '1rem';
+                    tituloFormacion.style.color = '#2c3e50';
+                    tareasLista.appendChild(tituloFormacion);
+                    
+                    lineaActual.tareasFormacion.forEach((tarea, index) => {
+                        tareasLista.appendChild(crearElementoTarea(tarea, 'fas fa-chalkboard-teacher', 'Tarea de formación', 'formacion', index));
+                    });
+                }
+            }
+            
+            if (filtroActual === 'todas' || filtroActual === 'intervencion') {
+                if (lineaActual.tareasIntervencion && lineaActual.tareasIntervencion.length > 0) {
+                    const tituloIntervencion = document.createElement('h3');
+                    tituloIntervencion.textContent = 'Actuaciones en el centro';
+                    tituloIntervencion.style.marginTop = '1.5rem';
+                    tituloIntervencion.style.marginBottom = '1rem';
+                    tituloIntervencion.style.color = '#2c3e50';
+                    tareasLista.appendChild(tituloIntervencion);
+                    
+                    lineaActual.tareasIntervencion.forEach((tarea, index) => {
+                        tareasLista.appendChild(crearElementoTarea(tarea, 'fas fa-tasks', 'Actuación en el centro', 'intervencion', index));
+                    });
+                }
+            }
+        }
+
+        function crearElementoTarea(textoTarea, icono, titulo, tipo, indice) {
+            const divTarea = document.createElement('div');
+            divTarea.className = 'tarea-item';
+            
+            const tituloTarea = document.createElement('h4');
+            tituloTarea.innerHTML = `<i class="${icono}"></i> ${titulo}`;
+            divTarea.appendChild(tituloTarea);
+            
+            const pTarea = document.createElement('p');
+            pTarea.textContent = textoTarea;
+            divTarea.appendChild(pTarea);
+            
+            // Controles de estado
+            const estadoTarea = document.createElement('div');
+            estadoTarea.className = 'estado-tarea';
+            
+            const estados = [
+                { valor: 'no-iniciado', texto: 'No iniciado' },
+                { valor: 'en-proceso', texto: 'En proceso' },
+                { valor: 'conseguido', texto: 'Conseguido' }
+            ];
+            
+            estados.forEach(estado => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = `estado-btn ${estado.valor}`;
+                boton.textContent = estado.texto;
+                boton.dataset.estado = estado.valor;
+                
+                // Verificar si este estado está activo - MODIFICACIÓN: Por defecto "No iniciado" está activo
+                const idTarea = `${ambitoActual}-${lineaActual.id}-${tipo}-${indice}`;
+                if (estadosTareas[idTarea] === estado.valor || 
+                    (estado.valor === 'no-iniciado' && !estadosTareas[idTarea])) {
+                    boton.classList.add('active');
+                }
+                
+                boton.addEventListener('click', function() {
+                    // Quitar clase active de todos los botones de esta tarea
+                    estadoTarea.querySelectorAll('.estado-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Añadir clase active al botón clickeado
+                    this.classList.add('active');
+                    
+                    // Guardar estado
+                    estadosTareas[idTarea] = estado.valor;
+                    guardarEstadosTareas();
+                });
+                
+                estadoTarea.appendChild(boton);
+            });
+            
+            divTarea.appendChild(estadoTarea);
+            
+            return divTarea;
+        }
+
+        function guardarEstadosTareas() {
+            localStorage.setItem('estadosTareas', JSON.stringify(estadosTareas));
+        }
+
+        function mostrarConsultas() {
+            ocultarTodasLasVistas();
+            vistas.consultas.classList.remove('hidden');
+        }
+
+        function mostrarPDF() {
+            ocultarTodasLasVistas();
+            vistas.pdf.classList.remove('hidden');
+        }
+
+        function mostrarGitHub() {
+            ocultarTodasLasVistas();
+            vistas.github.classList.remove('hidden');
+        }
+
+        function ocultarTodasLasVistas() {
+            Object.values(vistas).forEach(vista => vista.classList.add('hidden'));
+        }
+
+        function inicializarFiltroResponsables() {
+            const selectResponsable = document.getElementById('filtro-responsable');
+            
+            // Obtener todos los responsables únicos
+            const responsables = new Set();
+            
+            for (const ambito in planData) {
+                planData[ambito].lineas.forEach(linea => {
+                    linea.responsables.forEach(responsable => {
+                        responsables.add(responsable);
+                    });
+                });
+            }
+            
+            // Ordenar alfabéticamente
+            const responsablesOrdenados = Array.from(responsables).sort();
+            
+            // Añadir opciones al select
+            responsablesOrdenados.forEach(responsable => {
+                const option = document.createElement('option');
+                option.value = responsable;
+                option.textContent = responsable;
+                selectResponsable.appendChild(option);
+            });
+        }
+
+        function realizarBusqueda() {
+            const ambitoSeleccionado = document.getElementById('filtro-ambito').value;
+            const responsableSeleccionado = document.getElementById('filtro-responsable').value;
+            const trimestreSeleccionado = document.getElementById('filtro-trimestre').value;
+            const tipoSeleccionado = document.getElementById('filtro-tipo').value;
+            
+            // Limpiar resultados anteriores
+            resultadosConsulta.innerHTML = '';
+            
+            // Realizar búsqueda
+            let resultados = [];
+            
+            for (const ambitoId in planData) {
+                if (ambitoSeleccionado !== 'todos' && ambitoSeleccionado !== ambitoId) {
+                    continue;
+                }
+                
+                planData[ambitoId].lineas.forEach(linea => {
+                    // Verificar si la línea coincide con los filtros
+                    const coincideResponsable = responsableSeleccionado === 'todos' || 
+                                              linea.responsables.includes(responsableSeleccionado);
+                    
+                    const coincideTrimestre = trimestreSeleccionado === 'todos' || 
+                                            linea.temporalizacion.includes(trimestreSeleccionado);
+                    
+                    if (coincideResponsable && coincideTrimestre) {
+                        // Añadir tareas de formación si coinciden
+                        if (tipoSeleccionado === 'todos' || tipoSeleccionado === 'formacion') {
+                            linea.tareasFormacion.forEach(tarea => {
+                                resultados.push(crearResultadoBusqueda(
+                                    planData[ambitoId].titulo,
+                                    linea,
+                                    'Formación',
+                                    tarea
+                                ));
+                            });
+                        }
+                        
+                        // Añadir tareas de intervención si coinciden
+                        if (tipoSeleccionado === 'todos' || tipoSeleccionado === 'intervencion') {
+                            linea.tareasIntervencion.forEach(tarea => {
+                                resultados.push(crearResultadoBusqueda(
+                                    planData[ambitoId].titulo,
+                                    linea,
+                                    'Actuación en el centro',
+                                    tarea
+                                ));
+                            });
+                        }
+                    }
+                });
+            }
+            
+            // Mostrar resultados
+            if (resultados.length === 0) {
+                resultadosConsulta.innerHTML = '<p>No se encontraron tareas que coincidan con los criterios de búsqueda.</p>';
+                return;
+            }
+            
+            resultados.forEach(resultado => resultadosConsulta.appendChild(resultado));
+        }
+
+        function crearResultadoBusqueda(ambito, linea, tipo, tarea) {
+            const divResultado = document.createElement('div');
+            divResultado.className = 'resultado-item';
+            
+            const titulo = document.createElement('h4');
+            titulo.textContent = tarea;
+            divResultado.appendChild(titulo);
+            
+            const detalles = document.createElement('div');
+            detalles.style.marginTop = '0.8rem';
+            
+            const badgeAmbito = document.createElement('span');
+            badgeAmbito.className = 'badge badge-ambito';
+            badgeAmbito.textContent = ambito;
+            detalles.appendChild(badgeAmbito);
+            
+            const badgeTipo = document.createElement('span');
+            badgeTipo.className = 'badge badge-tipo';
+            badgeTipo.textContent = tipo;
+            detalles.appendChild(badgeTipo);
+            
+            // Añadir badge STEAM 4.0 si corresponde (ahora es un botón)
+            if (linea.steam4) {
+                const badgeSteam = document.createElement('span');
+                badgeSteam.className = 'badge badge-steam';
+                badgeSteam.innerHTML = '<i class="fas fa-robot"></i> STEAM 4.0';
+                badgeSteam.addEventListener('click', mostrarSteam);
+                detalles.appendChild(badgeSteam);
+            }
+            
+            linea.temporalizacion.forEach(trimestre => {
+                const badgeTrimestre = document.createElement('span');
+                badgeTrimestre.className = 'badge badge-trimestre';
+                badgeTrimestre.textContent = trimestre;
+                detalles.appendChild(badgeTrimestre);
+            });
+            
+            divResultado.appendChild(detalles);
+            
+            const infoLinea = document.createElement('p');
+            infoLinea.style.marginTop = '0.8rem';
+            infoLinea.innerHTML = `<strong>Línea:</strong> Línea ${linea.id}: ${linea.titulo}`;
+            divResultado.appendChild(infoLinea);
+            
+            const infoResponsables = document.createElement('p');
+            infoResponsables.style.marginTop = '0.5rem';
+            infoResponsables.innerHTML = `<strong>Responsables:</strong> ${linea.responsables.join(', ')}`;
+            divResultado.appendChild(infoResponsables);
+            
+            return divResultado;
+        }
+
+        // Funciones de exportación/importación JSON
+        function exportarJson() {
+            // Recopilar todos los estados
+            const datosGlobales = {
+                fecha: new Date().toISOString(),
+                version: "1.0",
+                estadosTareas: estadosTareas
+            };
+            
+            // Crear y descargar archivo JSON
+            const datosJSON = JSON.stringify(datosGlobales, null, 2);
+            const blob = new Blob([datosJSON], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `estado-global-plan-digital-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Datos exportados correctamente en formato JSON');
+            cerrarModalDatos();
+        }
+
+        function importarJson(event) {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            
+            const lector = new FileReader();
+            lector.onload = function(e) {
+                try {
+                    const datosGlobales = JSON.parse(e.target.result);
+                    
+                    // Verificar que el archivo es válido
+                    if (!datosGlobales.estadosTareas) {
+                        throw new Error('Formato de archivo inválido');
+                    }
+                    
+                    // Actualizar estados
+                    estadosTareas = datosGlobales.estadosTareas;
+                    guardarEstadosTareas();
+                    
+                    // Recargar la vista actual si estamos en una línea
+                    if (lineaActual) {
+                        mostrarTareasLinea();
+                    }
+                    
+                    alert('Datos importados correctamente desde el archivo JSON');
+                    cerrarModalDatos();
+                } catch (error) {
+                    alert('Error al importar el archivo: ' + error.message);
+                }
+            };
+            lector.readAsText(archivo);
+            
+            // Limpiar el input de archivo
+            event.target.value = '';
+        }
+
+        // Funciones de GitHub
+        function guardarTokenGitHub() {
+            const token = githubTokenInput.value.trim();
+            if (!token) {
+                mostrarMensajeGitHub('Por favor, introduce un token válido', 'error');
+                return;
+            }
+            
+            githubToken = token;
+            localStorage.setItem('githubToken', token);
+            mostrarMensajeGitHub('Token guardado correctamente', 'success');
+        }
+
+        async function exportarGitHub() {
+            if (!githubToken) {
+                mostrarMensajeGitHub('Primero debes guardar un token de GitHub', 'error');
+                return;
+            }
+            
+            try {
+                // Crear datos para el gist
+                const datosExportacion = {
+                    fecha: new Date().toISOString(),
+                    version: "1.0",
+                    estadosTareas: estadosTareas
+                };
+                
+                const respuesta = await fetch('https://api.github.com/gists', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        description: `Plan de Actuación Digital - Estados de tareas - ${new Date().toLocaleDateString()}`,
+                        public: false,
+                        files: {
+                            'estados-tareas.json': {
+                                content: JSON.stringify(datosExportacion, null, 2)
+                            }
+                        }
+                    })
+                });
+                
+                if (!respuesta.ok) {
+                    throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
+                }
+                
+                const datos = await respuesta.json();
+                mostrarMensajeGitHub(`Datos guardados en GitHub Gists. ID: ${datos.id}`, 'success');
+            } catch (error) {
+                mostrarMensajeGitHub('Error al guardar en GitHub: ' + error.message, 'error');
+            }
+        }
+
+        // Funciones del modal para seleccionar Gists
+        async function mostrarModalGists() {
+            if (!githubToken) {
+                mostrarMensajeGitHub('Primero debes guardar un token de GitHub', 'error');
+                return;
+            }
+            
+            try {
+                // Obtener lista de gists del usuario
+                const respuesta = await fetch('https://api.github.com/gists', {
+                    headers: {
+                        'Authorization': `token ${githubToken}`
+                    }
+                });
+                
+                if (!respuesta.ok) {
+                    throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
+                }
+                
+                const gists = await respuesta.json();
+                
+                // Buscar gists relacionados con la aplicación
+                const gistsAplicacion = gists.filter(gist => 
+                    gist.description && gist.description.includes('Plan de Actuación Digital') &&
+                    gist.files['estados-tareas.json']
+                );
+                
+                if (gistsAplicacion.length === 0) {
+                    mostrarMensajeModal('No se encontraron datos guardados anteriormente', 'info');
+                    return;
+                }
+                
+                // Ordenar por fecha de creación (más reciente primero)
+                gistsAplicacion.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                
+                // Mostrar modal con la lista de gists
+                mostrarGistsEnModal(gistsAplicacion);
+                
+            } catch (error) {
+                mostrarMensajeModal('Error al cargar desde GitHub: ' + error.message, 'error');
+            }
+        }
+
+        function mostrarGistsEnModal(gists) {
+            // Limpiar lista anterior
+            gistsList.innerHTML = '';
+            modalMessage.classList.add('hidden');
+            
+            // Añadir cada gist a la lista
+            gists.forEach(gist => {
+                const li = document.createElement('li');
+                li.className = 'gist-item';
+                
+                const gistInfo = document.createElement('div');
+                gistInfo.className = 'gist-info';
+                
+                const descripcion = document.createElement('div');
+                descripcion.className = 'gist-description';
+                descripcion.textContent = gist.description || 'Sin descripción';
+                
+                const meta = document.createElement('div');
+                meta.className = 'gist-meta';
+                
+                const fecha = document.createElement('div');
+                fecha.className = 'gist-date';
+                fecha.innerHTML = `<i class="far fa-calendar"></i> ${new Date(gist.created_at).toLocaleDateString()}`;
+                
+                const archivos = document.createElement('div');
+                archivos.className = 'gist-files';
+                archivos.innerHTML = `<i class="far fa-file"></i> ${Object.keys(gist.files).length} archivo(s)`;
+                
+                meta.appendChild(fecha);
+                meta.appendChild(archivos);
+                
+                gistInfo.appendChild(descripcion);
+                gistInfo.appendChild(meta);
+                
+                const botonSeleccionar = document.createElement('button');
+                botonSeleccionar.className = 'gist-select-btn';
+                botonSeleccionar.textContent = 'Seleccionar';
+                botonSeleccionar.addEventListener('click', () => seleccionarGist(gist));
+                
+                li.appendChild(gistInfo);
+                li.appendChild(botonSeleccionar);
+                
+                gistsList.appendChild(li);
+            });
+            
+            // Mostrar modal
+            modalGists.classList.add('active');
+        }
+
+        async function seleccionarGist(gist) {
+            try {
+                // Obtener contenido del gist
+                const respuestaContenido = await fetch(gist.files['estados-tareas.json'].raw_url);
+                if (!respuestaContenido.ok) {
+                    throw new Error('No se pudo obtener el contenido del gist');
+                }
+                
+                const datosExportacion = await respuestaContenido.json();
+                
+                // Actualizar estados
+                estadosTareas = datosExportacion.estadosTareas;
+                guardarEstadosTareas();
+                
+                // Recargar la vista actual si estamos en una línea
+                if (lineaActual) {
+                    mostrarTareasLinea();
+                }
+                
+                mostrarMensajeModal(`Datos cargados correctamente desde GitHub (${new Date(datosExportacion.fecha).toLocaleDateString()})`, 'success');
+                
+                // Cerrar modal después de un tiempo
+                setTimeout(() => {
+                    cerrarModalGists();
+                    mostrarMensajeGitHub(`Datos cargados correctamente desde GitHub (${new Date(datosExportacion.fecha).toLocaleDateString()})`, 'success');
+                }, 2000);
+                
+            } catch (error) {
+                mostrarMensajeModal('Error al cargar el gist seleccionado: ' + error.message, 'error');
+            }
+        }
+
+        function cerrarModalGists() {
+            modalGists.classList.remove('active');
+        }
+        
+        function mostrarModalDatos() {
+            modalDatos.classList.add('active');
+        }
+        
+        function cerrarModalDatos() {
+            modalDatos.classList.remove('active');
+        }
+
+        function mostrarMensajeModal(mensaje, tipo) {
+            modalMessage.textContent = mensaje;
+            modalMessage.className = 'modal-message';
+            modalMessage.classList.add(tipo);
+            modalMessage.classList.remove('hidden');
+        }
+
+        function mostrarMensajeGitHub(mensaje, tipo) {
+            githubMensaje.textContent = mensaje;
+            githubMensaje.className = '';
+            githubMensaje.classList.add(tipo);
+            
+            if (tipo === 'success') {
+                githubMensaje.style.color = 'green';
+            } else if (tipo === 'error') {
+                githubMensaje.style.color = 'red';
+            } else {
+                githubMensaje.style.color = 'orange';
+            }
+        }
+
+        // Funciones de generación de PDF (en formato horizontal)
+        function generarPDF() {
+            // Obtener filtros seleccionados
+            const estadosSeleccionados = [];
+            if (document.getElementById('pdf-no-iniciado').checked) estadosSeleccionados.push('no-iniciado');
+            if (document.getElementById('pdf-en-proceso').checked) estadosSeleccionados.push('en-proceso');
+            if (document.getElementById('pdf-conseguido').checked) estadosSeleccionados.push('conseguido');
+            
+            const ambitosSeleccionados = [];
+            if (document.getElementById('pdf-organizacion').checked) ambitosSeleccionados.push('organizacion');
+            if (document.getElementById('pdf-informacion').checked) ambitosSeleccionados.push('informacion');
+            if (document.getElementById('pdf-procesos').checked) ambitosSeleccionados.push('procesos');
+            
+            const tiposSeleccionados = [];
+            if (document.getElementById('pdf-formacion').checked) tiposSeleccionados.push('formacion');
+            if (document.getElementById('pdf-intervencion').checked) tiposSeleccionados.push('intervencion');
+            
+            // Recopilar tareas según los filtros
+            const tareasFiltradas = [];
+            
+            for (const ambitoId of ambitosSeleccionados) {
+                const ambito = planData[ambitoId];
+                
+                ambito.lineas.forEach(linea => {
+                    // Tareas de formación
+                    if (tiposSeleccionados.includes('formacion')) {
+                        linea.tareasFormacion.forEach((tarea, index) => {
+                            const idTarea = `${ambitoId}-${linea.id}-formacion-${index}`;
+                            const estado = estadosTareas[idTarea] || 'no-iniciado';
+                            
+                            if (estadosSeleccionados.includes(estado)) {
+                                tareasFiltradas.push({
+                                    ambito: ambito.titulo,
+                                    linea: `Línea ${linea.id}: ${linea.titulo}`,
+                                    tarea: tarea,
+                                    tipo: 'Formación',
+                                    estado: estado,
+                                    steam4: linea.steam4,
+                                    responsables: linea.responsables.join(', '),
+                                    herramientas: linea.evaluacion.herramientas,
+                                    temporalizacion: linea.temporalizacion.join(', ')
+                                });
+                            }
+                        });
+                    }
+                    
+                    // Tareas de intervención
+                    if (tiposSeleccionados.includes('intervencion')) {
+                        linea.tareasIntervencion.forEach((tarea, index) => {
+                            const idTarea = `${ambitoId}-${linea.id}-intervencion-${index}`;
+                            const estado = estadosTareas[idTarea] || 'no-iniciado';
+                            
+                            if (estadosSeleccionados.includes(estado)) {
+                                tareasFiltradas.push({
+                                    ambito: ambito.titulo,
+                                    linea: `Línea ${linea.id}: ${linea.titulo}`,
+                                    tarea: tarea,
+                                    tipo: 'Actuación en el centro',
+                                    estado: estado,
+                                    steam4: linea.steam4,
+                                    responsables: linea.responsables.join(', '),
+                                    herramientas: linea.evaluacion.herramientas,
+                                    temporalizacion: linea.temporalizacion.join(', ')
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Verificar si hay tareas para exportar
+            if (tareasFiltradas.length === 0) {
+                mostrarMensajePDF('No hay tareas que coincidan con los filtros seleccionados', 'error');
+                return;
+            }
+            
+            // Crear PDF en formato horizontal
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            // Configuración inicial
+            doc.setFont('helvetica');
+            
+            // Encabezado
+            doc.setFontSize(20);
+            doc.setTextColor(40, 40, 40);
+            doc.text('PLAN DE ACTUACIÓN DIGITAL', 148, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text('IES Virgen de Villadiego', 148, 30, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.text(`Curso 2025-2026 - Fecha de exportación: ${new Date().toLocaleDateString()}`, 148, 38, { align: 'center' });
+            
+            // Información de filtros aplicados
+            let yPos = 50;
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Filtros aplicados:', 20, yPos);
+            yPos += 7;
+            
+            // Estados
+            let estadosTexto = 'Estados: ';
+            if (estadosSeleccionados.length === 3) {
+                estadosTexto += 'Todos';
+            } else {
+                estadosTexto += estadosSeleccionados.map(e => {
+                    if (e === 'no-iniciado') return 'No iniciado';
+                    if (e === 'en-proceso') return 'En proceso';
+                    if (e === 'conseguido') return 'Conseguido';
+                    return e;
+                }).join(', ');
+            }
+            doc.text(estadosTexto, 25, yPos);
+            yPos += 5;
+            
+            // Ámbitos
+            let ambitosTexto = 'Ámbitos: ';
+            if (ambitosSeleccionados.length === 3) {
+                ambitosTexto += 'Todos';
+            } else {
+                ambitosTexto += ambitosSeleccionados.map(a => planData[a].titulo).join(', ');
+            }
+            doc.text(ambitosTexto, 25, yPos);
+            yPos += 5;
+            
+            // Tipos
+            let tiposTexto = 'Tipos: ';
+            if (tiposSeleccionados.length === 2) {
+                tiposTexto += 'Todos';
+            } else {
+                tiposTexto += tiposSeleccionados.map(t => {
+                    if (t === 'formacion') return 'Formación';
+                    if (t === 'intervencion') return 'Actuaciones en el centro';
+                    return t;
+                }).join(', ');
+            }
+            doc.text(tiposTexto, 25, yPos);
+            yPos += 10;
+            
+            // Línea separadora
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, yPos, 276, yPos);
+            yPos += 15;
+            
+            // Tabla de tareas
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            // Encabezados de tabla
+            const headers = [['Ámbito', 'Línea', 'Tarea', 'Tipo', 'Estado', 'STEAM 4.0', 'Responsables', 'Herramientas', 'Temporalización']];
+            
+            // Datos de la tabla
+            const data = tareasFiltradas.map(tarea => [
+                tarea.ambito,
+                tarea.linea,
+                tarea.tarea,
+                tarea.tipo,
+                tarea.estado === 'no-iniciado' ? 'No iniciado' : 
+                tarea.estado === 'en-proceso' ? 'En proceso' : 'Conseguido',
+                tarea.steam4 ? 'Sí' : 'No',
+                tarea.responsables,
+                tarea.herramientas,
+                tarea.temporalizacion
+            ]);
+            
+            // Configuración de la tabla para formato horizontal
+            const tableConfig = {
+                startY: yPos,
+                head: headers,
+                body: data,
+                theme: 'grid',
+                styles: {
+                    fontSize: 7,
+                    cellPadding: 2,
+                    overflow: 'linebreak',
+                    lineWidth: 0.1
+                },
+                headStyles: {
+                    fillColor: [52, 152, 219],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                },
+                columnStyles: {
+                    0: { cellWidth: 25 }, // Ámbito
+                    1: { cellWidth: 30 }, // Línea
+                    2: { cellWidth: 45 }, // Tarea
+                    3: { cellWidth: 20 }, // Tipo
+                    4: { cellWidth: 15 }, // Estado
+                    5: { cellWidth: 15 }, // STEAM 4.0
+                    6: { cellWidth: 30 }, // Responsables
+                    7: { cellWidth: 30 }, // Herramientas
+                    8: { cellWidth: 25 }  // Temporalización
+                },
+                margin: { left: 20, right: 20 }
+            };
+            
+            // Generar tabla
+            doc.autoTable(tableConfig);
+            
+            // Pie de página
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Página ${i} de ${pageCount}`, 148, 200, { align: 'center' });
+                doc.text('IES Virgen de Villadiego - Plan de Actuación Digital', 148, 205, { align: 'center' });
+            }
+            
+            // Guardar PDF
+            doc.save(`plan-digital-${new Date().toISOString().split('T')[0]}.pdf`);
+            
+            mostrarMensajePDF(`PDF generado correctamente con ${tareasFiltradas.length} tareas`, 'success');
+        }
+
+        function mostrarMensajePDF(mensaje, tipo) {
+            pdfMensaje.textContent = mensaje;
+            pdfMensaje.className = '';
+            pdfMensaje.classList.add(tipo);
+            
+            if (tipo === 'success') {
+                pdfMensaje.style.color = 'green';
+            } else if (tipo === 'error') {
+                pdfMensaje.style.color = 'red';
+            } else {
+                pdfMensaje.style.color = 'orange';
+            }
+        }
+    </script>
+	
+	<script>
+	  // Registrar Service Worker
+	  if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+		  navigator.serviceWorker.register('sw.js')
+			.then(function(registration) {
+			  console.log('ServiceWorker registrado con éxito: ', registration.scope);
+			})
+			.catch(function(error) {
+			  console.log('Error registrando ServiceWorker: ', error);
+			});
+		});
+	  }
+
+	  // Detectar si la app está en modo standalone (PWA)
+	  function isRunningStandalone() {
+		return (window.matchMedia('(display-mode: standalone)').matches) || 
+			   (window.navigator.standalone) || 
+			   (document.referrer.includes('android-app://'));
+	  }
+
+	  // Mostrar botón de instalación
+	  let deferredPrompt;
+	  const installButton = document.createElement('button');
+	  
+	  window.addEventListener('beforeinstallprompt', (e) => {
+		e.preventDefault();
+		deferredPrompt = e;
+		
+		// Crear y mostrar botón de instalación
+		installButton.innerHTML = '<i class="fas fa-download"></i> Instalar App';
+		installButton.style.cssText = `
+		  position: fixed;
+		  bottom: 20px;
+		  right: 20px;
+		  background: var(--success-color);
+		  color: white;
+		  border: none;
+		  padding: 12px 20px;
+		  border-radius: 50px;
+		  cursor: pointer;
+		  font-weight: 600;
+		  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+		  z-index: 1000;
+		  display: flex;
+		  align-items: center;
+		  gap: 8px;
+		`;
+    
+		installButton.addEventListener('click', async () => {
+		  if (!deferredPrompt) return;
+		  
+		  deferredPrompt.prompt();
+		  const { outcome } = await deferredPrompt.userChoice;
+		  
+		  if (outcome === 'accepted') {
+			installButton.style.display = 'none';
+		  }
+		  
+		  deferredPrompt = null;
+		});
+		
+		document.body.appendChild(installButton);
+	  });
+
+	  window.addEventListener('appinstalled', () => {
+		installButton.style.display = 'none';
+		deferredPrompt = null;
+	  });
+
+	  // Ocultar botón si ya está instalado
+	  if (isRunningStandalone()) {
+		if (installButton.parentNode) {
+		  installButton.style.display = 'none';
+		}
+	  }
+	</script>
+	
+</body>
+</html>

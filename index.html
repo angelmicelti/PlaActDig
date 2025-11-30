@@ -161,23 +161,22 @@
         /* Navegación */
         nav {
             background-color: white;
-            padding: 0.8rem;
+            padding: 1rem;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 100;
-            transition: all 0.3s ease;
         }
         
         .nav-btn {
             background: white;
             color: var(--secondary-color);
             border: 2px solid var(--primary-color);
-            padding: 0.8rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 50px;
             cursor: pointer;
             font-size: 1rem;
@@ -187,7 +186,6 @@
             align-items: center;
             gap: 0.5rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            white-space: nowrap;
         }
         
         .nav-btn:hover {
@@ -1140,55 +1138,23 @@
             display: none;
         }
         
-        /* MENÚ HAMBURGUESA PARA MÓVILES - MEJORADO */
-        .mobile-menu-toggle {
-            display: none;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            position: absolute;
-            right: 1rem;
-            top: 0.8rem;
-            z-index: 101;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .mobile-menu-toggle:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.25);
-        }
-        
-        .nav-buttons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            justify-content: center;
-        }
-        
         /* MEJORAS DE RESPONSIVIDAD */
         
         /* Dispositivos móviles pequeños */
-        @media (max-width: 768px) {
+        @media (max-width: 480px) {
             #portal-titulo {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             #portal-subtitulo {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
             }
             
             #portal-curso {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
+            
+          
             
             header {
                 padding: 1.5rem 1rem;
@@ -1313,22 +1279,9 @@
                 font-size: 0.9rem;
             }
             
-            /* MENÚ PARA TABLETS */
-            nav {
-                padding: 0.6rem;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                justify-content: flex-start;
-            }
-            
             .nav-btn {
-                padding: 0.6rem 1rem;
+                padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
-                flex-shrink: 0;
-            }
-            
-            .nav-btn span {
-                display: inline;
             }
             
             .gestion-btn {
@@ -1342,87 +1295,124 @@
             }
         }
         
-        /* Móviles más pequeños */
-        @media (max-width: 600px) {
-            .mobile-menu-toggle {
-                display: block;
+        /* Tablets y móviles grandes */
+        @media (max-width: 768px) {
+            #portal-titulo {
+                font-size: 2.5rem;
             }
             
-            .nav-buttons-container {
-                flex-direction: column;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                background: white;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                z-index: 100;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                border-radius: 0 0 8px 8px;
+            #portal-subtitulo {
+                font-size: 1.8rem;
             }
             
-            .nav-buttons-container.open {
-                max-height: 400px;
-                padding: 1rem;
+            #portal-curso {
+                font-size: 1.5rem;
             }
             
-            nav {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 0.5rem;
-                position: relative;
-            }
-            
-            .nav-btn {
-                width: 100%;
-                justify-content: flex-start;
-                margin-bottom: 0.5rem;
-                padding: 1rem 1.2rem;
-                font-size: 1rem;
-                border-radius: 8px;
-                border: 2px solid #e0e0e0;
-                background: #f8f9fa;
-                transition: all 0.3s ease;
-            }
-            
-            .nav-btn:hover {
-                background: var(--primary-color);
-                color: white;
-                transform: translateX(5px);
-                border-color: var(--primary-color);
-            }
-            
-            .nav-btn span {
-                display: inline;
+            #escudo-container {
+                width: 80px;
+                height: 120px;
+                top: 1rem;
+                right: 1rem;
             }
             
             .ambitos-grid {
                 grid-template-columns: 1fr;
             }
             
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
             .gestion-buttons {
                 grid-template-columns: 1fr;
+            }
+            
+            .filtros-avanzados {
+                grid-template-columns: 1fr;
+            }
+            
+            .github-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .seccion-cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .volver-btn {
+                align-self: flex-end;
+            }
+            
+            .filtros-pdf {
+                grid-template-columns: 1fr;
+            }
+            
+            .steam-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steam-hero {
+                padding: 2rem 1.5rem;
+            }
+            
+            .steam-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .steam-integration ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .gist-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .gist-select-btn {
+                align-self: flex-end;
+            }
+            
+            .datos-modal-buttons {
+                gap: 0.8rem;
+            }
+            
+            .datos-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
             }
         }
         
         /* Dispositivos muy pequeños (orientación vertical) */
-        @media (max-width: 480px) {
+        @media (max-width: 360px) {
             #portal-titulo {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             #portal-subtitulo {
-                font-size: 1.4rem;
-            }
-            
-            #portal-curso {
                 font-size: 1.2rem;
             }
             
-            #portal-instruccion {
+            #portal-curso {
                 font-size: 1rem;
+            }
+            
+            #portal-instruccion {
+                font-size: 0.9rem;
             }
             
             .ambito-card {
@@ -1462,49 +1452,14 @@
             .steam-integration {
                 padding: 1rem;
             }
-            
-            .nav-btn {
-                padding: 0.9rem 1rem;
-                font-size: 0.9rem;
-            }
-            
-            .nav-btn span {
-                display: inline;
-            }
-        }
-        
-        /* Dispositivos muy pequeños (orientación vertical) */
-        @media (max-width: 360px) {
-            #portal-titulo {
-                font-size: 1.8rem;
-            }
-            
-            #portal-subtitulo {
-                font-size: 1.2rem;
-            }
-            
-            #portal-curso {
-                font-size: 1rem;
-            }
-            
-            #portal-instruccion {
-                font-size: 0.9rem;
-            }
-            
-            .nav-btn {
-                padding: 0.8rem 0.9rem;
-                font-size: 0.85rem;
-            }
-            
-            .nav-btn span {
-                display: inline;
-            }
         }
     </style>
 </head>
 <body>
     <!-- Portal de Inicio -->
     <div id="portal-inicio">
+        
+        
         <h1 id="portal-titulo">PLAN DE ACTUACIÓN DIGITAL</h1>
         <h2 id="portal-subtitulo">IES Virgen de Villadiego</h2>
         <p id="portal-curso">Curso 2025-2026</p>
@@ -1519,26 +1474,21 @@
         </header>
         
         <nav>
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                <i class="fas fa-bars"></i> Menú
+            <button class="nav-btn" id="btn-inicio">
+                <i class="fas fa-home"></i> Inicio
             </button>
-            <div class="nav-buttons-container" id="nav-buttons-container">
-                <button class="nav-btn" id="btn-inicio">
-                    <i class="fas fa-home"></i> <span>Inicio</span>
-                </button>
-                <button class="nav-btn" id="btn-organizacion">
-                    <i class="fas fa-building"></i> <span>Organización</span>
-                </button>
-                <button class="nav-btn" id="btn-informacion">
-                    <i class="fas fa-comments"></i> <span>Información</span>
-                </button>
-                <button class="nav-btn" id="btn-procesos">
-                    <i class="fas fa-graduation-cap"></i> <span>Procesos</span>
-                </button>
-                <button class="nav-btn steam" id="btn-steam">
-                    <i class="fas fa-robot"></i> <span>STEAM 4.0</span>
-                </button>
-            </div>
+            <button class="nav-btn" id="btn-organizacion">
+                <i class="fas fa-building"></i> Organización del Centro
+            </button>
+            <button class="nav-btn" id="btn-informacion">
+                <i class="fas fa-comments"></i> Información y Comunicación
+            </button>
+            <button class="nav-btn" id="btn-procesos">
+                <i class="fas fa-graduation-cap"></i> Procesos de Enseñanza Aprendizaje
+            </button>
+            <button class="nav-btn steam" id="btn-steam">
+                <i class="fas fa-robot"></i> STEAM 4.0
+            </button>
         </nav>
         
         <!-- Línea divisoria -->
@@ -2304,10 +2254,6 @@
         const btnImportarJson = document.getElementById('btn-importar-json');
         const importarArchivoJson = document.getElementById('importar-archivo-json');
 
-        // Elementos del menú móvil
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const navButtonsContainer = document.getElementById('nav-buttons-container');
-
         // Inicialización de la aplicación
         document.addEventListener('DOMContentLoaded', function() {
             inicializarEventListeners();
@@ -2315,19 +2261,7 @@
             if (githubToken) {
                 githubTokenInput.value = githubToken;
             }
-            
-            // Inicializar menú móvil
-            inicializarMenuMovil();
         });
-
-        // Inicialización del menú móvil
-        function inicializarMenuMovil() {
-            // Verificar si estamos en un dispositivo móvil
-            if (window.innerWidth <= 600) {
-                // Cerrar el menú por defecto en móviles
-                navButtonsContainer.classList.remove('open');
-            }
-        }
 
         // Inicialización de event listeners
         function inicializarEventListeners() {
@@ -2340,81 +2274,33 @@
                 }, 500);
             });
             
-            // Toggle del menú móvil
-            mobileMenuToggle.addEventListener('click', function() {
-                navButtonsContainer.classList.toggle('open');
-            });
-            
             // Navegación por botones
-            document.getElementById('btn-inicio').addEventListener('click', function() {
-                mostrarInicio();
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-organizacion').addEventListener('click', function() {
-                toggleAmbito('organizacion');
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-informacion').addEventListener('click', function() {
-                toggleAmbito('informacion');
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-procesos').addEventListener('click', function() {
-                toggleAmbito('procesos');
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-steam').addEventListener('click', function() {
-                toggleSteam();
-                cerrarMenuMovil();
-            });
+            document.getElementById('btn-inicio').addEventListener('click', mostrarInicio);
+            document.getElementById('btn-organizacion').addEventListener('click', toggleAmbito.bind(null, 'organizacion'));
+            document.getElementById('btn-informacion').addEventListener('click', toggleAmbito.bind(null, 'informacion'));
+            document.getElementById('btn-procesos').addEventListener('click', toggleAmbito.bind(null, 'procesos'));
+            document.getElementById('btn-steam').addEventListener('click', toggleSteam);
             
             // Botones de gestión
-            document.getElementById('btn-consultas').addEventListener('click', function() {
-                toggleConsultas();
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-pdf').addEventListener('click', function() {
-                togglePDF();
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-github').addEventListener('click', function() {
-                toggleGitHub();
-                cerrarMenuMovil();
-            });
-            document.getElementById('btn-datos').addEventListener('click', function() {
-                mostrarModalDatos();
-                cerrarMenuMovil();
-            });
+            document.getElementById('btn-consultas').addEventListener('click', toggleConsultas);
+            document.getElementById('btn-pdf').addEventListener('click', togglePDF);
+            document.getElementById('btn-github').addEventListener('click', toggleGitHub);
+            document.getElementById('btn-datos').addEventListener('click', mostrarModalDatos);
             
             // Navegación por tarjetas
             document.querySelectorAll('.ambito-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const ambito = this.getAttribute('data-ambito');
                     mostrarAmbito(ambito);
-                    cerrarMenuMovil();
                 });
             });
             
             // Botones de volver
-            document.getElementById('volver-lineas').addEventListener('click', function() {
-                mostrarInicio();
-                cerrarMenuMovil();
-            });
-            document.getElementById('volver-detalle').addEventListener('click', function() {
-                mostrarLineasAmbito(ambitoActual);
-                cerrarMenuMovil();
-            });
-            document.getElementById('volver-steam').addEventListener('click', function() {
-                mostrarInicio();
-                cerrarMenuMovil();
-            });
-            document.getElementById('volver-pdf').addEventListener('click', function() {
-                mostrarInicio();
-                cerrarMenuMovil();
-            });
-            document.getElementById('volver-github').addEventListener('click', function() {
-                mostrarInicio();
-                cerrarMenuMovil();
-            });
+            document.getElementById('volver-lineas').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-detalle').addEventListener('click', () => mostrarLineasAmbito(ambitoActual));
+            document.getElementById('volver-steam').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-pdf').addEventListener('click', mostrarInicio);
+            document.getElementById('volver-github').addEventListener('click', mostrarInicio);
             
             // Filtros de tareas
             document.querySelectorAll('.filtro-btn').forEach(btn => {
@@ -2463,23 +2349,6 @@
                 this.classList.toggle('open');
                 gestionButtons.classList.toggle('open');
             });
-            
-            // Cerrar menú móvil al hacer clic fuera
-            document.addEventListener('click', function(event) {
-                if (window.innerWidth <= 600 && 
-                    !navButtonsContainer.contains(event.target) && 
-                    !mobileMenuToggle.contains(event.target) &&
-                    navButtonsContainer.classList.contains('open')) {
-                    cerrarMenuMovil();
-                }
-            });
-        }
-        
-        // Función para cerrar el menú móvil
-        function cerrarMenuMovil() {
-            if (window.innerWidth <= 600) {
-                navButtonsContainer.classList.remove('open');
-            }
         }
 
         // Funciones de navegación
@@ -3157,9 +3026,9 @@
                 guardarEstadosTareas();
                 
                 // Recargar la vista actual si estamos en una línea
-                    if (lineaActual) {
-                        mostrarTareasLinea();
-                    }
+                if (lineaActual) {
+                    mostrarTareasLinea();
+                }
                 
                 mostrarMensajeModal(`Datos cargados correctamente desde GitHub (${new Date(datosExportacion.fecha).toLocaleDateString()})`, 'success');
                 
